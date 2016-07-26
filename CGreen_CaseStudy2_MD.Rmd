@@ -3,7 +3,9 @@ title: "Clifford Green Case Study 2"
 output: html_document
 ---
 
+#Introduction 
 
+  For this Case Study we are going to look at the data provided by the Chulwalran government. The objective its to find the most appropriate model to forecast the exports for one of the selected plants. The plants that Chulwalra exports are Efak, Wuge, Blue Etel, and Red Etel. I chose to observed and predict the exports for Efak. The different types of forecasting models I will use to attempt to predict the Efak future exports are simple exponential smoothing, Holts exponential trend, and Holt-Winter seasonal method.
 
 First we must load fpp  
 ```{r }
@@ -42,11 +44,12 @@ EfakPlan <- ts(EfakPlanVector, start=c(2008,1), end=c(2013,12), frequency=12)
 and creating a time series from the data
 
 
-2
+# Predictive modelling 
+Now we are using the various provided models to find the an accurate prediction forecast for the Efak data.To find a better model we are going to compare AIC, AICc, BIC, and the Error Measures. AIC is the measure of relative quality of statistical models. For this analysis, the lower the AIC means the model minimizes information loss, and therefor may fit the data better. AICc is AIC but it corrects for finite sample sizes. RMSE shows the absolute fit of the model to the data. Since it is the square root of the variance of the residuals, it is an absolute measure of fit.
 
 ##Base Model-Simple Exponential Smooth 
 
-3
+Not a very sophisticated model, it is essentially assuming that the model will increase exponentially with no trend or seasonal accommodation. Seeing as how there some seasonal trend in the Efak data, this model will obviously not be the most accomidating. We will use this model as the base fit and try to find a model that fits better. 
 ```{r}
 Model_ses <- ses(EfakAsIs, h=12)
 plot(Model_ses)
@@ -69,7 +72,7 @@ legend("topleft",lty=1, col=c(1,"green"), c("data", expression(alpha == 0.671)),
 ```
 
 ###Holts Linear Trend Model
-4
+Holts linear Trend Model is An extension of the base model for simple exponential smoothing. Holts linear model enables forecasting that incorporates trends. The four different types of Holts Linear Trend models that we can test are, Linear Trend, Exponential trend, Exponential Damped and Additive Damped Trend. The predicted model is not longer flat because of the estimated trend in each instance.  
 ```{r}
 
 Model_holt_1 <- holt(EfakAsIs,h=12)
@@ -86,7 +89,8 @@ plot(Model_holt_1)
 # Training set 12981.24 101278.2 78180.91 -0.3405668 11.62379 0.5586599 -0.03795009
 ```
 
-5
+Looking at the first holt linear trend model, we can see that the AIC, AICc, BIC, and RSME are all lower than the base simple exponential smoothing. From this we can say that this model fits the trend better than the previous.
+
 
 
 ###Holts Exponential Trend
@@ -107,7 +111,8 @@ plot(Model_holt_2)
 
 ```
 
-6
+The above model, instead of assuming linearity, it assumes the trend is exponential, when comparing the AIC, AICc, BIC, and RSME, we can see that all the values are again lower, so this model fits the data better than the holts linear.
+
 
 ###Holts Addittive Damped Trend
 ```{r}
@@ -124,7 +129,7 @@ plot(Model_holt_3)
 # Training set 15606.58 102291.5 78689.55 0.03374579 11.66226 0.5622945 -0.03419302
 ```
 
-7
+The next model we tested was holts damped, which works with the exponential model. Unfortunately, when comparing the AIC, AICc, BIC, and RSME, the values are worse than just the Holts exponential model. 
 
 ###Holts Exponential Damped
 ```{r}
@@ -140,7 +145,8 @@ plot(Model_holt_4)
 # level and slope can be plotted individually for each model. 
 ```
 
-8
+Next we tried the Holts exponential + damped, when comparing the AIC, AICc, BIC, and RSME, the values did improve, but they are still lower than just the Holts exponential model. So far the best model fit is the Holts exponential model.
+
 
 ###All Holts Models plotted together
 ```{r}
@@ -163,7 +169,13 @@ Above is a plot of the as is data comparted to the predictive models
 
 
 ##Holt-Winter's seasonal method  
-9
+"Holt and Winters have expanded Holt's model further to include the
+seasonality aspect. The parameter gamma, which is for smoothing the
+seasonality, was added to achieve this. The values are better than 
+the models without seasonality. This logically matches our results from the regression approaches,the data is strongly influenced by seasonality. 
+In the following model, none of the parameters are given so that they
+will be optimised automatically. There are two models: one using
+an additive error model method and one using a multiplicative error model."
 
 ###Holts Seasonal-additive  
 ```{r}
@@ -177,7 +189,7 @@ plot(Model_hw_1)
 # Training set 8710.859 76350.81 61147.93 -0.2519017 8.973478 0.4369468 -0.09126643
 ```
 
-10
+Here we test the Holts Seasonal Additive model, this model accommodates seasonal changes. When we compare the AIC, AICc, BIC, and RSME to the Holts exponential model, we can see significant decreases in all of the values. It is clear that this model fits the data much better than the previously observed models. 
 
 ###Holts Seasonal-multiplicative
 ```{r}
@@ -192,7 +204,7 @@ plot(Model_hw_2)
 # The additive model gives slightly better results than the multiplicative model.
 ```
 
-11
+Here we test the Holts Seasonal Multiplicative model. When we compare the AIC, AICc, BIC, and RSME to the Holts seasonal additive model, we can see some of the values have increase slightly. The AIC, AICc, BIC and RSME are all higher but the ME is lower. Although the ME is lower, the Holts Seasonal Additive Model still fits the data better than the Multiplicative model.
 
 
 ###All Holts seasonal plotted together
@@ -210,5 +222,5 @@ Above is a plot of the two Holts Seasonal Models
 
 #Conclution
 
-12
+  If we had to give to presentation to the Chulwalar government and give an accurate model and prediction for the Efak exports based off of the information we were provided. I would suggest using a the Holts Season Additive Model for the prediction model. When comparing the AIC and RMSE values, the Holts Seasonal Additive Model fits the data much better than other models observed. I think we can confidently say that best fitting model is the Holts Seasonal Additive Model based on the summary statistics. 
 
