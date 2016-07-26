@@ -1,0 +1,214 @@
+---
+title: "Clifford Green Case Study 2"
+output: html_document
+---
+
+
+
+First we must load fpp  
+```{r }
+library(fpp)
+```
+
+
+
+### Importing Datasets
+
+No we must import the datasets, using the read.csv function
+```{r}
+ImportedAsIsData <- read.csv(file="ImportedAsIsDataChulwalar.csv", header = F, sep=";", fill = T) #chose ImportedAsIsDataChulwalar.csv
+
+ImportedPlanData <- read.csv("ImportedPlanDataChulwalar.csv", header = F, sep=";", fill = T) #chose ImportedPlanDataChulwalar.csv
+
+ImportedIndicators <- read.csv("ImportedIndicatorsChulwalar.csv", header = F, sep=";", fill = T) # chose ImportedIndicatorsChulwalar.csv
+```
+
+### Cleaning the needed Data
+
+
+Now we are extracting the necessary data from each file
+```{r }
+
+EfakAsIsVector <- c(ImportedAsIsData [16:27,2],ImportedAsIsData [16:27,3],ImportedAsIsData [16:27,4],ImportedAsIsData [16:27,5],ImportedAsIsData [16:27,6],ImportedAsIsData [16:27,7])
+
+EfakPlanVector <- c(ImportedPlanData[16:27,2],ImportedPlanData[16:27,3],ImportedPlanData[16:27,4],ImportedPlanData[16:27,5],ImportedPlanData[16:27,6],ImportedPlanData[16:27,7])
+
+EfakAsIs <- ts(EfakAsIsVector , start=c(2008,1), end=c(2013,12), frequency=12)
+
+EfakPlan <- ts(EfakPlanVector, start=c(2008,1), end=c(2013,12), frequency=12)
+
+```
+
+and creating a time series from the data
+
+
+2
+
+##Base Model-Simple Exponential Smooth 
+
+3
+```{r}
+Model_ses <- ses(EfakAsIs, h=12)
+plot(Model_ses)
+# 
+#    AIC     AICc      BIC 
+#1977.827 1978.001 1982.380 
+# 
+# Error measures:
+#                    ME     RMSE      MAE      MPE     MAPE      MASE       ACF1
+# Training set 28255.57 105746.4 83785.28 1.618532 12.24071 0.5987073 -0.1644141
+# The Akaike's Information Criterion(AIC/AICc) or the Bayesian Information 
+# Criterion (BIC) should be at minimum.
+
+
+plot(Model_ses, plot.conf=FALSE, ylab="Exports Chulwalar  )", xlab="Year", main="", fcol="white", type="o")
+lines(fitted(Model_ses), col="green", type="o")
+lines(Model_ses$mean, col="blue", type="o")
+legend("topleft",lty=1, col=c(1,"green"), c("data", expression(alpha == 0.671)),pch=1)
+
+```
+
+###Holts Linear Trend Model
+4
+```{r}
+
+Model_holt_1 <- holt(EfakAsIs,h=12)
+plot(Model_holt_1)
+#this model assumes a linear model
+# The trend is exponential if the intercepts(level) and the gradient (slope) are
+# multiplied with eachother. The values are worse. As the Beta was very low in 
+# the optimisation, the forecast is very similar to the ses() model. 
+#    AIC     AICc      BIC 
+#1975.610 1976.207 1984.717  
+# 
+# Error measures:
+#                    ME     RMSE      MAE      MPE     MAPE      MASE       ACF1
+# Training set 12981.24 101278.2 78180.91 -0.3405668 11.62379 0.5586599 -0.03795009
+```
+
+5
+
+
+###Holts Exponential Trend
+```{r}
+
+Model_holt_2<- holt(EfakAsIs, exponential=TRUE,h=12)
+plot(Model_holt_2)
+#this model test an exponential model
+# As such simple trends tend to forecast the future to positively, we have added
+# a dampener.
+# Similar values to that of Model_holt_1 
+#    AIC     AICc      BIC 
+#1975.029 1975.626 1984.136 
+# 
+# Error measures:
+#                    ME     RMSE      MAE      MPE     MAPE      MASE       ACF1
+# Training set 1027.787 99625.5 76933.69 -2.069541 11.56529 0.5497476 -0.0136902
+
+```
+
+6
+
+###Holts Addittive Damped Trend
+```{r}
+Model_holt_3 <- holt(EfakAsIs, damped=TRUE,h=12)
+plot(Model_holt_3)
+
+# This also works for exponential trends. 
+# The values remain worse. 
+#    AIC     AICc      BIC 
+#1979.044 1979.953 1990.427 
+# 
+# Error measures:
+#                    ME     RMSE      MAE      MPE     MAPE      MASE       ACF1
+# Training set 15606.58 102291.5 78689.55 0.03374579 11.66226 0.5622945 -0.03419302
+```
+
+7
+
+###Holts Exponential Damped
+```{r}
+Model_holt_4 <- holt(EfakAsIs, exponential=TRUE, damped=TRUE,h=12)
+plot(Model_holt_4)
+#    AIC     AICc      BIC 
+#1978.710 1979.619 1990.093 
+# 
+# Error measures:
+#                    ME     RMSE      MAE      MPE     MAPE      MASE       ACF1
+# Training set 3135.947 101334.4 77773.93 -2.424052 11.85843 0.5557518 -0.07442583
+
+# level and slope can be plotted individually for each model. 
+```
+
+8
+
+###All Holts Models plotted together
+```{r}
+plot(Model_holt_1, plot.conf=FALSE, ylab="Exports Chulwalar  )", xlab="Year", main="", fcol="white", type="o")
+lines(fitted(Model_ses), col="purple", type="o")
+lines(fitted(Model_holt_1), col="blue", type="o")
+lines(fitted(Model_holt_2), col="red", type="o")
+lines(fitted(Model_holt_3), col="green", type="o")
+lines(fitted(Model_holt_4), col="orange", type="o")
+lines(Model_ses$mean, col="purple", type="o")
+lines(Model_holt_1$mean, col="blue", type="o")
+lines(Model_holt_2$mean, col="red", type="o")
+lines(Model_holt_3$mean, col="green", type="o")
+lines(Model_holt_4$mean, col="orange", type="o")
+legend("topleft",lty=1, col=c(1,"purple","blue","red","green","orange"), c("data", "SES","Holts auto", "Exponential", "Additive Damped", "Multiplicative Damped"),pch=1)
+
+```
+
+Above is a plot of the as is data comparted to the predictive models
+
+
+##Holt-Winter's seasonal method  
+9
+
+###Holts Seasonal-additive  
+```{r}
+Model_hw_1 <- hw(EfakAsIs ,seasonal="additive",h=12)
+plot(Model_hw_1)
+#    AIC     AICc      BIC 
+#1958.925 1968.816 1995.352 
+# 
+# Error measures:
+#                    ME     RMSE      MAE      MPE     MAPE      MASE       ACF1
+# Training set 8710.859 76350.81 61147.93 -0.2519017 8.973478 0.4369468 -0.09126643
+```
+
+10
+
+###Holts Seasonal-multiplicative
+```{r}
+Model_hw_2 <- hw(EfakAsIs ,seasonal="multiplicative",h=12)
+plot(Model_hw_2)
+#    AIC     AICc      BIC 
+#1964.418 1974.309 2000.844  
+# 
+# Error measures:
+#                    ME     RMSE      MAE      MPE     MAPE      MASE       ACF1
+# Training set 6211.726 83390.08 64171.99 -0.6174998 9.086466 0.458556 -0.1381724
+# The additive model gives slightly better results than the multiplicative model.
+```
+
+11
+
+
+###All Holts seasonal plotted together
+```{r}
+plot(Model_hw_1, ylab="Exports Chulwalar  ", plot.conf=FALSE, type="o", fcol="white", xlab="Year")
+lines(fitted(Model_hw_1), col="red", lty=2)
+lines(fitted(Model_hw_2), col="green", lty=2)
+lines(Model_hw_1$mean, type="o", col="red")
+lines(Model_hw_2$mean, type="o", col="green")
+legend("topleft",lty=1, pch=1, col=1:3, c("data","Holt Winters' Additive","Holt Winters' Multiplicative"))
+```
+
+Above is a plot of the two Holts Seasonal Models
+
+
+#Conclution
+
+12
+
