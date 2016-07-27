@@ -8,13 +8,13 @@ output: html_document
   For this Case Study we are going to look at the data provided by the Chulwalran government. The objective its to find the most appropriate model to forecast the exports for one of the selected plants. The plants that Chulwalra exports are Efak, Wuge, Blue Etel, and Red Etel. I chose to observed and predict the exports for Efak. The different types of forecasting models I will use to attempt to predict the Efak future exports are simple exponential smoothing, Holts exponential trend, and Holt-Winter seasonal method.
 
 First we must load fpp  
-```{r }
+```{r results='hide', message=FALSE}
 library(fpp)
 ```
 
 
 
-### Importing Datasets
+## 1. Importing Datasets
 
 No we must import the datasets, using the read.csv function
 ```{r}
@@ -25,7 +25,7 @@ ImportedPlanData <- read.csv("ImportedPlanDataChulwalar.csv", header = F, sep=";
 ImportedIndicators <- read.csv("ImportedIndicatorsChulwalar.csv", header = F, sep=";", fill = T) # chose ImportedIndicatorsChulwalar.csv
 ```
 
-### Cleaning the needed Data
+## 2.Cleaning the needed Data
 
 
 Now we are extracting the necessary data from each file
@@ -43,14 +43,11 @@ YearAsIsVector <- c(ImportedAsIsData [86,2],ImportedAsIsData [86,3],ImportedAsIs
 
 ```
 
-
+## 3. Exploring the Data
 Creating an STL for EFAK export
 ```{r}
 EfakAsIs_stl <- stl(EfakAsIs , s.window=5)
 # Thus the individual time series can be shown graphically and tabularly.
-
-# The trend of the total exports is almost linear. A relatively uniform 
-# seaonality can be seen.
 
 par(mfrow=c(3,2))
 
@@ -60,7 +57,6 @@ par(mfrow=c(3,2))
 # in the total As Is data.
 
 plot(EfakAsIs_stl, col="black", main="EfakAsIs_stl")
-EfakAsIs_stl
 ```
 Looking at the data there is somewhat of a seasonal trend. It is important to note that the full Efak data set is continuously y increasing. It also looks like exports of Efak pick up significantly between 2010 and 2011.
 
@@ -80,7 +76,7 @@ monthplot(EfakAsIs_stl$time.series[,"seasonal"], main="", ylab="Seasonal")
 
 ####CEPI Correlation:
 First we are going to at the correlation between the change in Export Price Index and the Efak Exports 
-```{r}
+```{r echo=FALSE}
 # Monthly Change in Export Price Index (CEPI)
 CEPIVector <- c(ImportedIndicators[2:13,2],ImportedIndicators[2:13,3],ImportedIndicators[2:13,4],ImportedIndicators[2:13,5],ImportedIndicators[2:13,6],ImportedIndicators[2:13,7])
 CEPI <- ts(CEPIVector , start=c(2008,1), end=c(2013,12), frequency=12)
@@ -92,7 +88,7 @@ cor(EfakAsIs , CEPI)
 A correlation of .93 would suggest that Efak exports and the Change in Export Price Index are positively related, so the two variables have a very strong  positive linear relationship.
 
 
-# Monthly Satisfaction Index (SI) government based data
+####Monthly Satisfaction Index (SI) government based data
 ```{r}
 SIGovVector <- c(ImportedIndicators[16:27,2],ImportedIndicators[16:27,3],ImportedIndicators[16:27,4],ImportedIndicators[16:27,5],ImportedIndicators[16:27,6],ImportedIndicators[16:27,7])
 SIGov <- ts(SIGovVector , start=c(2008,1), end=c(2013,12), frequency=12)
@@ -138,7 +134,7 @@ cor(EfakAsIs , SIExtern)
 ```
 Not much is really explain about what this satisfaction index incorporates but I am taking it to mean the customer satisfaction. This being the case it makes sense that the correlation coefficient is .83, which shows are very strong positive relationship. Happy customers means more exports.
 
-###Yearly Exports from Urbano
+#### Yearly Exports from Urbano
 ```{r}
 # Yearly exports from Urbano
 UrbanoExportsVector <- c(ImportedIndicators[72:83,2],ImportedIndicators[72:83,3],ImportedIndicators[72:83,4],ImportedIndicators[72:83,5],ImportedIndicators[72:83,6],ImportedIndicators[72:83,7])
@@ -364,7 +360,7 @@ AIC(ModelWithInfluenceNationalHolidays)
 
 ```
 
-Looking at all the AIC values for the models above it seems like the the lowest is AEPI followed by CEPI. Looking at the plot its clear that model somewhat follows the Efak trend.
+Looking at all the AIC values for the models above it seems like the the lowest is AEPI followed by CEPI. Looking at the plot its clear that model somewhat follows the Efak trend. So when we begin forecasting we will know where to start
 
 ```{r}
 IndicatorsMatrix <-cbind(CEPIVector, SIGovVector, TemperatureVector, BirthsVector, SIGovVector, UrbanoExportsVector, GlobalisationPartyMembersVector, AEPIVector, PPIEtel, NationalHolidaysVector, ChulwalarIndexVector, InflationVector, IndependenceDayPresentsVector)
@@ -446,11 +442,12 @@ AIC(ModelWithCEPIOnly)
 ```
 
 
-
+# Predictive modelling 
+Now we are using the various provided models to find the an accurate prediction forecast for the Efak data.To find a better model we are going to compare AIC, AICc, BIC, and the Error Measures. AIC is the measure of relative quality of statistical models. For this analysis, the lower the AIC means the model minimizes information loss, and therefor may fit the data better. AICc is AIC but it corrects for finite sample sizes. RMSE shows the absolute fit of the model to the data. Since it is the square root of the variance of the residuals, it is an absolute measure of fit.
 
 ###Shorten the time series in order to test the forecasts               
 
-```{r}
+```{r echo=FALSE}
 # Shortening the exports data in the Time Series in order to be able to compare the produced forecasts with the 
 # As Is data.
 
@@ -593,7 +590,6 @@ This AIC value is very low: 1528, which makes sense because its modeled with hig
 # Shorten ModelWithLowCorrelatingIndicators by one year in order to be able to produce a forecast for 2013. 
 ModelWithLowCorrelatingIndicators_2012 <- tslm(EfakAsis_2012 ~ trend + season + NationalHolidays_2012 + UrbanoExports_2012 + GlobalisationPartyMembers_2012)
 AIC(ModelWithLowCorrelatingIndicators_2012) 
-RMSE(ModelWithLowCorrelatingIndicators_2012)
 # Add "newdata" to the 2013 indicator values for the forecast 
 ModelWithLowCorrelatingIndicators_Forecast <- forecast(ModelWithLowCorrelatingIndicators_2012,newdata=data.frame(NationalHolidays_2012=NationalHolidays_2013, UrbanoExports_2012= UrbanoExports_2013, GlobalisationPartyMembers_2012=GlobalisationPartyMembers_2013),h=12)
 plot(ModelWithLowCorrelatingIndicators_Forecast, main="ModelWithLowCorrelatingIndicators_Forecast")
@@ -616,9 +612,8 @@ summary(EfakAsIs_2013_lm)
 ```
 This AIC value is also very small. It is 1524, which means this model may fit better than the pervious one.
 
-#################################################################################
-#  5.2.2 Forecast ModelWithTrendAndSeasonalityOnly                              #
-#################################################################################
+
+####  Forecast ModelWithTrendAndSeasonalityOnly                          
 ```{r}
 # Shorten ModelWithTrendAndSeasonalityOnly by one year in order to be able to produce a forecast for 2013.
 ModelWithTrendAndSeasonalityOnly_2012 <- tslm(EfakAsIs_2012 ~ trend + season)
@@ -649,7 +644,7 @@ This AIC value is 1553 which is larger than the previous model, this suggest it 
 
 
 
-####  5.2.3 Forecast ModelWithEfakExportsIndicators                            
+####  Forecast ModelWithEfakExportsIndicators                            
 
 ```{r}
 # Shorten the variables in ModelWithEfakExportsIndicators by one year in order to be able to produce a forecast for 2013.
@@ -674,10 +669,7 @@ plot(ModelWithEfakExportsIndicators_Forecast, main="ModelWithEfakExportsIndicato
 plot(ModelEfakSalesWithCEPI_Forecast, main="ModelEfakSalesWithCEPI_Forecast")
 plot(ModelEfakSalesWithTrendAnsSeasonalityOnly_Forecast, main="ModelEfakSalesWithTrendAnsSeasonalityOnly_Forecast")
 plot(ModelWithCEPIOnly_Forecast, main="ModelWithCEPIOnly_Forecast")
-ModelWithEfakExportsIndicators_Forecast
-ModelEfakSalesWithCEPI_Forecast
-ModelEfakSalesWithTrendAnsSeasonalityOnly_Forecast
-ModelWithCEPIOnly_Forecast
+
 
 # In order to be able to correlate the Forecast with the As Is Data, it is necessary to convert the Point 
 # Estimator into a time series.
@@ -698,7 +690,7 @@ cor(ModelWithCEPIOnly_PointForecast, EfakAsIs_2013)
 cor(EfakAsIs_2013, EfakPlan_2013)
 
 ```
-
+Looking at the Efak Exports as  Indicator, the AIC values are still not as small as the Model using low correlation Indicators. 
 
 
 
@@ -725,7 +717,7 @@ cor(ModelWithTotalUrbanoExports_PointForecast, EfakAsIs_2013)
 cor(EfakAsIs_2013, EfakPlan_2013)
 
 ```
-
+The AIC value for this model is 1523, which is lower than all models we have observed previously. This would suggest that this model has the best fit. 
 
 ####Forecast ModelWithNationalHolidays                                 
 
@@ -749,7 +741,7 @@ ModelWithNationalHolidays_PointForecast <- ts(ModelWithNationalHolidays_Forecast
 # Correlation of the forecasts and As Is Data. As a comparison, the correlation of the As Is data for 2013 with the Plan Data.
 cor(ModelWithNationalHolidays_PointForecast, EfakAsIs_2013) 
 ```
-
+The AIC value of 1554 is still higher than the total Urbano Exports model
 
 #### Forecast ModelWithInfluenceNationalHolidays                        
 
@@ -773,7 +765,7 @@ cor(ModelWithInfluenceNationalHolidays_PointForecast, EfakAsIs_2013)
 cor(EfakAsIs_2013, EfakPlan_2013)
 
 ```
-
+The national holidays model has a larger AIC of 1554, than the Urbano Exports, this makes sense because when we looked the correlation between the two variables it didn’t seem like either had a significant impact on the other
 
 
 #### Forecast for 2014                                                    
@@ -821,14 +813,7 @@ Forecast_2014_alternative_df <-as.data.frame(Forecast_2014_alternative)
 PointForecast_2014_alternative <- ts(Forecast_2014_alternative_df$"Point Forecast", start=c(2014,1), end=c(2014,12), frequency=12)
 PointForecast_2014_alternative
 ```
-
-
-
-
-
-
-# Predictive modelling 
-Now we are using the various provided models to find the an accurate prediction forecast for the Efak data.To find a better model we are going to compare AIC, AICc, BIC, and the Error Measures. AIC is the measure of relative quality of statistical models. For this analysis, the lower the AIC means the model minimizes information loss, and therefor may fit the data better. AICc is AIC but it corrects for finite sample sizes. RMSE shows the absolute fit of the model to the data. Since it is the square root of the variance of the residuals, it is an absolute measure of fit.
+The forecast for 2014 has a much higher AIC of 1831, just using the exports of 2014 doesn’t seem like it would provide a well fitting forecast for future Efak exports.The alternative did not provide a great fit either. 
 
 ##Base Model-Simple Exponential Smooth 
 
