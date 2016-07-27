@@ -42,6 +42,7 @@ EfakPlan <- ts(EfakPlanVector, start=c(2008,1), end=c(2013,12), frequency=12)
 ```
 
 
+Creating an STL for EFAK export
 ```{r}
 EfakAsIs_stl <- stl(EfakAsIs , s.window=5)
 # Thus the individual time series can be shown graphically and tabularly.
@@ -59,8 +60,7 @@ par(mfrow=c(3,2))
 plot(EfakAsIs_stl, col="black", main="EfakAsIs_stl")
 EfakAsIs_stl
 ```
-
-
+Looking at the data there is somewhat of a seasonal trend. It is important to note that the full Efak data set is continuously y increasing. It also looks like exports of Efak pick up significantly between 2010 and 2011.
 
 
 ```{r}
@@ -69,19 +69,15 @@ EfakAsIs_stl <- stl(EfakAsIs , s.window=5)
 plot(EfakAsIs_stl, col="black", main="EfakAsIs_stl")
 ```
 
-
+The code below changes the seasonality into a monthly plot
 ```{r}
 monthplot(EfakAsIs_stl$time.series[,"seasonal"], main="", ylab="Seasonal")
 ```
 
 
-```{r}
-monthplot(EfakAsIs_stl$time.series[,"seasonal"], main="", ylab="Seasonal")
-```
 
-
-
-CEPI Correlation
+####CEPI Correlation:
+First we are going to at the correlation between the change in Export Price Index and the Efak Exports 
 ```{r}
 # Monthly Change in Export Price Index (CEPI)
 CEPIVector <- c(ImportedIndicators[2:13,2],ImportedIndicators[2:13,3],ImportedIndicators[2:13,4],ImportedIndicators[2:13,5],ImportedIndicators[2:13,6],ImportedIndicators[2:13,7])
@@ -89,9 +85,12 @@ CEPI <- ts(CEPIVector , start=c(2008,1), end=c(2013,12), frequency=12)
 plot(CEPI, main="CEPI")
 
 cor(EfakAsIs , CEPI)
-```
 
-Temperature Correlation
+```
+A correlation of .93 would suggest that Efak exports and the Change in Export Price Index are positively related, so the two variables have a very strong  positive linear relationship.
+
+####Temperature Correlation
+Next we look at the correlation between temperature and the Efak exports
 ```{r}
 TemperatureVector <- c(ImportedIndicators[30:41,2],ImportedIndicators[30:41,3],ImportedIndicators[30:41,4],ImportedIndicators[30:41,5],ImportedIndicators[30:41,6],ImportedIndicators[30:41,7])
 Temperature <- ts(TemperatureVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -99,9 +98,10 @@ plot(Temperature, main="Temperature")
 
 cor(EfakAsIs , Temperature)
 ```
+A correlation of -.07 would suggest that Efak exports and Temperature have a weak negative relationship, it makes sense that change in temperatures may have an effect on Efak growth and exports
 
-
-Births In Chulwalar
+####Births In Chulwalar
+Next we are observing the correlation between monthly birthday and Efak exports
 ```{r}
 # Monthly births in Chulwalar 
 BirthsVector <- c(ImportedIndicators[44:55,2],ImportedIndicators[44:55,3],ImportedIndicators[44:55,4],ImportedIndicators[44:55,5],ImportedIndicators[44:55,6],ImportedIndicators[44:55,7])
@@ -110,9 +110,9 @@ plot(Births, main="Births")
 
 cor(EfakAsIs , Births)
 ```
+A correlation of -.058 would suggest an almost negligible correlation between monthly births and Efak Exports. According to the data provided, experts thought there may be a correlation because workers would be trying to export more goods to help pay for the cost of new children, but this was apparently not the case. If anything you'd think the correlation would be negative because time had to be taken off from working hours to take care of newborns
 
-
-Mothly Satisfaction Index
+####Mothly Satisfaction Index
 ```{r}
 # Monthly Satisfaction Index (SI) external index 
 SIExternVector <- c(ImportedIndicators[58:69,2],ImportedIndicators[58:69,3],ImportedIndicators[58:69,4],ImportedIndicators[58:69,5],ImportedIndicators[58:69,6],ImportedIndicators[58:69,7])
@@ -121,9 +121,9 @@ plot(SIExtern, main="SIExtern")
 
 cor(EfakAsIs , SIExtern)
 ```
+Not much is really explain about what this satisfaction index incorporates but I am taking it to mean the customer satisfaction. This being the case it makes sense that the correlation coefficient is .83, which shows are very strong positive relationship. Happy customers means more exports.
 
-
-Yearly Exports from Urbano
+###Yearly Exports from Urbano
 ```{r}
 # Yearly exports from Urbano
 UrbanoExportsVector <- c(ImportedIndicators[72:83,2],ImportedIndicators[72:83,3],ImportedIndicators[72:83,4],ImportedIndicators[72:83,5],ImportedIndicators[72:83,6],ImportedIndicators[72:83,7])
@@ -132,8 +132,10 @@ plot(UrbanoExports, main="UrbanoExports")
 
 cor(EfakAsIs , UrbanoExports)
 ```
+Here we look at the correlation between exports from Urbano and Efak exports, it makes senses the correlation is .916 because if exports from Urbano increase, Efak exports should also increase. This relies on the assumption that Efak is an export of Urbano. Ultimately we observe a very strong postive correlation between the two variables.
 
 
+#### Yearly number of Globalisation Party members in Chulwalar
 ```{r}
 # Yearly number of Globalisation Party members in Chulwalar
 GlobalisationPartyMembersVector <- c(ImportedIndicators[86:97,2],ImportedIndicators[86:97,3],ImportedIndicators[86:97,4],ImportedIndicators[86:97,5],ImportedIndicators[86:97,6],ImportedIndicators[86:97,7])
@@ -142,9 +144,9 @@ plot(GlobalisationPartyMembers, main="GlobalisationPartyMembers")
 
 cor(EfakAsIs , GlobalisationPartyMembers)
 ```
+Here we compare the number of Globalization party member and Efak exports. Again we have a positive correlation coefficient of .896, which would suggest a strong correlation between the two variables. Again this makes sense because as Globalization increases it would makes sense that exports increase as well.
 
-
-
+#### Monthly Average Export Price
 ```{r}
 # Monthly Average Export Price Index for Chulwalar
 AEPIVector <- c(ImportedIndicators[100:111,2],ImportedIndicators[100:111,3],ImportedIndicators[100:111,4],ImportedIndicators[100:111,5],ImportedIndicators[100:111,6],ImportedIndicators[100:111,7])
@@ -153,8 +155,10 @@ plot(AEPI, main="AEPI")
 
 cor(EfakAsIs , AEPI)
 ```
+Here we are observing the correlation between monthly average export price and Efak Exports. The correlation coefficient is .905. There is a strong positive correlation between Efak exports and export price. My guess is it’s a supply and demand thing, the more Efak exported the higher the export price goes.
 
 
+####National Holidays
 ```{r}
 # National Holidays
 NationalHolidaysVector <- c(ImportedIndicators[170:181,2],ImportedIndicators[170:181,3],ImportedIndicators[170:181,4],ImportedIndicators[170:181,5],ImportedIndicators[170:181,6],ImportedIndicators[170:181,7])
@@ -164,8 +168,9 @@ plot(NationalHolidays, main="NationalHolidays")
 
 cor(EfakAsIs , NationalHolidays)
 ```
+National Holidays and Efak exports have a correlation coefficient of .001, which to me is almost statistically insignificant. 
 
-
+#### Chulwalar Index
 ```{r}
 # Chulwalar Index (Total value of all companies in Chulwalar)
 ChulwalarIndexVector <- c(ImportedIndicators[128:139,2],ImportedIndicators[128:139,3],ImportedIndicators[128:139,4],ImportedIndicators[128:139,5],ImportedIndicators[128:139,6],ImportedIndicators[128:139,7])
@@ -174,8 +179,10 @@ plot(ChulwalarIndex, main="ChulwalarIndex")
 
 cor(EfakAsIs , ChulwalarIndex)
 ```
+The correlation coefficient for the Chulwalar Index and Efak exports is .71, which means as the total value for all Chulwalar companies increases, so does Efak exports. This makes sense because the more Efak sales should increase the value of group of companies in Chulwalar.
 
 
+####Monthyl Inflation Rate
 ```{r}
 # Monthly Inflation rate in Chulwalar 
 InflationVector <- c(ImportedIndicators[142:153,2],ImportedIndicators[142:153,3],ImportedIndicators[142:153,4],ImportedIndicators[142:153,5],ImportedIndicators[142:153,6],ImportedIndicators[142:153,7])
@@ -184,8 +191,9 @@ plot(Inflation, main="Inflation")
 
 cor(EfakAsIs , Inflation)
 ```
+The correlation coefficient for the monthly inflation rate and Efak exports is .145, so there is a slight positive correlation but nothing that warrants any further analysis in my opinion. 
 
-
+####Proposed spending for Independence Day
 ```{r}
 # Proposed spending for Independence day presents
 IndependenceDayPresentsVector <- c(ImportedIndicators[156:167,2],ImportedIndicators[156:167,3],ImportedIndicators[156:167,4],ImportedIndicators[156:167,5],ImportedIndicators[156:167,6],ImportedIndicators[156:167,7])
@@ -194,8 +202,10 @@ plot(IndependenceDayPresents, main="IndependenceDayPresents")
 
 cor(EfakAsIs , IndependenceDayPresents)
 ```
+Here look at the correlation between spending for independence data and Efak exports. The correlation coefficient is .52, which suggests a mild positive correlation. This is a bit surprising to me, I think this can buy the fact that when exports are high there is more money to be spent on the Independence day celebration.
 
 
+#### Influence of National Holidays
 ```{r}
 # Influence of National Holidays :
 # This indicator is an experiment where the influence of National Holidays is 
@@ -209,55 +219,12 @@ plot(InfluenceNationalHolidays, main="InfluenceNationalHolidays")
 
 cor(EfakAsIs , InfluenceNationalHolidays)
 ```
+Here we look at the influence of national holidays, but this includes months leading up to the holiday. The correlation coefficient is .099, which means there is a very mild correlation but not one that I think requires further analysis.
 
 
-```{r}
-# The months April and December do not correlate well with the exports data. 
-# However later tests will show that these are worth considering. 
-# The missing correlation is just due to the sparse structure of the NationalHolidays time series.
+#### The External Satisfaction Index Offset
 
-# Chulwalar Index (Total value of all companies in Chulwalar)
-ChulwalarIndexVector <- c(ImportedIndicators[128:139,2],ImportedIndicators[128:139,3],ImportedIndicators[128:139,4],ImportedIndicators[128:139,5],ImportedIndicators[128:139,6],ImportedIndicators[128:139,7])
-ChulwalarIndex <- ts(ChulwalarIndexVector, start=c(2008,1), end=c(2013,12), frequency=12)
-plot(ChulwalarIndex, main="ChulwalarIndex")
-
-cor(EfakAsIs , ChulwalarIndex)
-```
-
-
-```{r}
-# Monthly Inflation rate in Chulwalar 
-InflationVector <- c(ImportedIndicators[142:153,2],ImportedIndicators[142:153,3],ImportedIndicators[142:153,4],ImportedIndicators[142:153,5],ImportedIndicators[142:153,6],ImportedIndicators[142:153,7])
-Inflation <- ts(InflationVector, start=c(2008,1), end=c(2013,12), frequency=12)
-plot(Inflation, main="Inflation")
-
-
-cor(EfakAsIs , Inflation)
-```
-
-
-```{r}
-# Proposed spending for Independence day presents
-IndependenceDayPresentsVector <- c(ImportedIndicators[156:167,2],ImportedIndicators[156:167,3],ImportedIndicators[156:167,4],ImportedIndicators[156:167,5],ImportedIndicators[156:167,6],ImportedIndicators[156:167,7])
-IndependenceDayPresents <- ts(IndependenceDayPresentsVector, start=c(2008,1), end=c(2013,12), frequency=12)
-plot(IndependenceDayPresents, main="IndependenceDayPresents")
-
-cor(EfakAsIs , IndependenceDayPresents)
-```
-
-
-```{r}
-# Influence of National Holidays :
-# This indicator is an experiment where the influence of National Holidays is 
-# extended into the months leading up to the holiday. 
-# However later tests show that this indicator is no better for forecasting than the
-# orignial National Holidays indicator.    
-InfluenceNationalHolidaysVector <- c(ImportedIndicators[184:195,2],ImportedIndicators[184:195,3],ImportedIndicators[184:195,4],ImportedIndicators[184:195,5],ImportedIndicators[184:195,6],ImportedIndicators[184:195,7])
-InfluenceNationalHolidays <- ts(InfluenceNationalHolidaysVector, start=c(2008,1), end=c(2013,12), frequency=12)
-plot(InfluenceNationalHolidays, main="InfluenceNationalHolidays")
-
-cor(EfakAsIs , InfluenceNationalHolidays)
-```
+The indicator is to be offset by one month, to see if the index change makes itself first noticeable on exports in the following months.
 
 ```{r}
 SIExternOffsetByOneMonthVector <- c(ImportedIndicators[57:68,2],ImportedIndicators[57:68,3],ImportedIndicators[57:68,4],ImportedIndicators[57:68,5],ImportedIndicators[57:68,6],ImportedIndicators[57:68,7])
@@ -278,11 +245,13 @@ EfakAsIsWithoutNovDec2013 <- ts(EfakAsIsVector , start=c(2008,1), end=c(2013,10)
 
 cor(EfakAsIsWithoutNovDec2013, SIGovShifted2Months)
 ```
-
-
+No significant changes , the correlation coefficient is very small for both the one month offset and the two month offset.
 
 
 and creating a time series from the data
+
+
+
 
 
 # Predictive modelling 
