@@ -1,6 +1,6 @@
 ---
 title: "Clifford Green Case Study 2"
-output: html_document
+output: md_document
 ---
 
 #Introduction 
