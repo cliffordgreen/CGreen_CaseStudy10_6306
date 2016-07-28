@@ -27,34 +27,21 @@ First we must load fpp
 
 No we must import the datasets, using the read.csv function
 
-    ImportedAsIsData <- read.csv(file="ImportedAsIsDataChulwalar.csv", header = F, sep=";", fill = T) #chose ImportedAsIsDataChulwalar.csv
-
-    ImportedPlanData <- read.csv("ImportedPlanDataChulwalar.csv", header = F, sep=";", fill = T) #chose ImportedPlanDataChulwalar.csv
-
-    ImportedIndicators <- read.csv("ImportedIndicatorsChulwalar.csv", header = F, sep=";", fill = T) # chose ImportedIndicatorsChulwalar.csv
+    source("Analysis/GetData.R")
 
 2.Cleaning the needed Data
 --------------------------
 
 Now we are extracting the necessary data from each file
 
-    EfakAsIsVector <- c(ImportedAsIsData [16:27,2],ImportedAsIsData [16:27,3],ImportedAsIsData [16:27,4],ImportedAsIsData [16:27,5],ImportedAsIsData [16:27,6],ImportedAsIsData [16:27,7])
-
-    EfakPlanVector <- c(ImportedPlanData[16:27,2],ImportedPlanData[16:27,3],ImportedPlanData[16:27,4],ImportedPlanData[16:27,5],ImportedPlanData[16:27,6],ImportedPlanData[16:27,7])
-
-    EfakAsIs <- ts(EfakAsIsVector , start=c(2008,1), end=c(2013,12), frequency=12)
-
-    EfakPlan <- ts(EfakPlanVector, start=c(2008,1), end=c(2013,12), frequency=12)
-
-    YearAsIsVector <- c(ImportedAsIsData [86,2],ImportedAsIsData [86,3],ImportedAsIsData [86,4],ImportedAsIsData [86,5],ImportedAsIsData [86,6],ImportedAsIsData [86,7])
+    source("Analysis/CleanData.R")
 
 3. Exploring the Data
 ---------------------
 
 Creating an STL for EFAK export
 
-    EfakAsIs_stl <- stl(EfakAsIs , s.window=5)
-    plot(EfakAsIs_stl, col="black", main="EfakAsIs_stl")
+    source("Analysis/STLFunc.R")
 
 ![](CGreen_CaseStudy2_MD_files/figure-markdown_strict/unnamed-chunk-4-1.png)<!-- -->
 
