@@ -215,10 +215,7 @@ Here look at the correlation between spending for independence data and Efak exp
 This indicator is an experiment where the influence of National Holidays is extended into the months leading up to the holiday. 
 ```{r echo=FALSE}
 # Influence of National Holidays :
-# This indicator is an experiment where the influence of National Holidays is 
-# extended into the months leading up to the holiday. 
-# However later tests show that this indicator is no better for forecasting than the
-# orignial National Holidays indicator.    
+   
 InfluenceNationalHolidaysVector <- c(ImportedIndicators[184:195,2],ImportedIndicators[184:195,3],ImportedIndicators[184:195,4],ImportedIndicators[184:195,5],ImportedIndicators[184:195,6],ImportedIndicators[184:195,7])
 InfluenceNationalHolidays <- ts(InfluenceNationalHolidaysVector, start=c(2008,1), end=c(2013,12), frequency=12)
 plot(InfluenceNationalHolidays, main="InfluenceNationalHolidays")
