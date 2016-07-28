@@ -47,27 +47,13 @@ YearAsIsVector <- c(ImportedAsIsData [86,2],ImportedAsIsData [86,3],ImportedAsIs
 Creating an STL for EFAK export
 ```{r}
 EfakAsIs_stl <- stl(EfakAsIs , s.window=5)
-# Thus the individual time series can be shown graphically and tabularly.
-
-par(mfrow=c(3,2))
-
-# It is interesting to note that the almost linear trend is not seen in the 
-# individual segments. The individual trends run partially in opposite 
-# directions in the middle of the time scale, which causes the linear trend 
-# in the total As Is data.
-
 plot(EfakAsIs_stl, col="black", main="EfakAsIs_stl")
 ```
+
 Looking at the data there is somewhat of a seasonal trend. It is important to note that the full Efak data set is continuously y increasing. It also looks like exports of Efak pick up significantly between 2010 and 2011.
 
 
-```{r}
-cor(EfakAsIs , EfakPlan)
-EfakAsIs_stl <- stl(EfakAsIs , s.window=5)
-plot(EfakAsIs_stl, col="black", main="EfakAsIs_stl")
-```
-
-The code below changes the seasonality into a monthly plot
+The code below changes the seasonality into a monthly plot, so we can view it in a different way.
 ```{r}
 monthplot(EfakAsIs_stl$time.series[,"seasonal"], main="", ylab="Seasonal")
 ```
@@ -89,7 +75,7 @@ A correlation of .93 would suggest that Efak exports and the Change in Export Pr
 
 
 ####Monthly Satisfaction Index (SI) government based data
-```{r}
+```{r echo=FALSE}
 SIGovVector <- c(ImportedIndicators[16:27,2],ImportedIndicators[16:27,3],ImportedIndicators[16:27,4],ImportedIndicators[16:27,5],ImportedIndicators[16:27,6],ImportedIndicators[16:27,7])
 SIGov <- ts(SIGovVector , start=c(2008,1), end=c(2013,12), frequency=12)
 plot(SIGov, main="SIGov")
@@ -102,7 +88,7 @@ Slightly postive correlation value.
 
 ####Temperature Correlation
 Next we look at the correlation between temperature and the Efak exports
-```{r}
+```{r echo=FALSE}
 TemperatureVector <- c(ImportedIndicators[30:41,2],ImportedIndicators[30:41,3],ImportedIndicators[30:41,4],ImportedIndicators[30:41,5],ImportedIndicators[30:41,6],ImportedIndicators[30:41,7])
 Temperature <- ts(TemperatureVector, start=c(2008,1), end=c(2013,12), frequency=12)
 plot(Temperature, main="Temperature")
@@ -113,7 +99,7 @@ A correlation of -.07 would suggest that Efak exports and Temperature have a wea
 
 ####Births In Chulwalar
 Next we are observing the correlation between monthly birthday and Efak exports
-```{r}
+```{r echo=FALSE}
 # Monthly births in Chulwalar 
 BirthsVector <- c(ImportedIndicators[44:55,2],ImportedIndicators[44:55,3],ImportedIndicators[44:55,4],ImportedIndicators[44:55,5],ImportedIndicators[44:55,6],ImportedIndicators[44:55,7])
 Births <- ts(BirthsVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -124,7 +110,7 @@ cor(EfakAsIs , Births)
 A correlation of -.058 would suggest an almost negligible correlation between monthly births and Efak Exports. According to the data provided, experts thought there may be a correlation because workers would be trying to export more goods to help pay for the cost of new children, but this was apparently not the case. If anything you'd think the correlation would be negative because time had to be taken off from working hours to take care of newborns
 
 ####Mothly Satisfaction Index
-```{r}
+```{r echo=FALSE}
 # Monthly Satisfaction Index (SI) external index 
 SIExternVector <- c(ImportedIndicators[58:69,2],ImportedIndicators[58:69,3],ImportedIndicators[58:69,4],ImportedIndicators[58:69,5],ImportedIndicators[58:69,6],ImportedIndicators[58:69,7])
 SIExtern <- ts(SIExternVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -135,7 +121,7 @@ cor(EfakAsIs , SIExtern)
 Not much is really explain about what this satisfaction index incorporates but I am taking it to mean the customer satisfaction. This being the case it makes sense that the correlation coefficient is .83, which shows are very strong positive relationship. Happy customers means more exports.
 
 #### Yearly Exports from Urbano
-```{r}
+```{r echo=FALSE}
 # Yearly exports from Urbano
 UrbanoExportsVector <- c(ImportedIndicators[72:83,2],ImportedIndicators[72:83,3],ImportedIndicators[72:83,4],ImportedIndicators[72:83,5],ImportedIndicators[72:83,6],ImportedIndicators[72:83,7])
 UrbanoExports <- ts(UrbanoExportsVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -147,7 +133,7 @@ Here we look at the correlation between exports from Urbano and Efak exports, it
 
 
 #### Yearly number of Globalisation Party members in Chulwalar
-```{r}
+```{r echo=FALSE}
 # Yearly number of Globalisation Party members in Chulwalar
 GlobalisationPartyMembersVector <- c(ImportedIndicators[86:97,2],ImportedIndicators[86:97,3],ImportedIndicators[86:97,4],ImportedIndicators[86:97,5],ImportedIndicators[86:97,6],ImportedIndicators[86:97,7])
 GlobalisationPartyMembers <- ts(GlobalisationPartyMembersVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -158,7 +144,7 @@ cor(EfakAsIs , GlobalisationPartyMembers)
 Here we compare the number of Globalization party member and Efak exports. Again we have a positive correlation coefficient of .896, which would suggest a strong correlation between the two variables. Again this makes sense because as Globalization increases it would makes sense that exports increase as well.
 
 #### Monthly Average Export Price
-```{r}
+```{r echo=FALSE}
 # Monthly Average Export Price Index for Chulwalar
 AEPIVector <- c(ImportedIndicators[100:111,2],ImportedIndicators[100:111,3],ImportedIndicators[100:111,4],ImportedIndicators[100:111,5],ImportedIndicators[100:111,6],ImportedIndicators[100:111,7])
 AEPI <- ts(AEPIVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -169,7 +155,7 @@ cor(EfakAsIs , AEPI)
 Here we are observing the correlation between monthly average export price and Efak Exports. The correlation coefficient is .905. There is a strong positive correlation between Efak exports and export price. My guess is it’s a supply and demand thing, the more Efak exported the higher the export price goes.
 
 #### Monthly Producer Price Index (PPI) for Etel in Chulwalar
-```{r}
+```{r echo=FALSE}
 PPIEtelVector <- c(ImportedIndicators[114:125,2],ImportedIndicators[114:125,3],ImportedIndicators[114:125,4],ImportedIndicators[114:125,5],ImportedIndicators[114:125,6],ImportedIndicators[114:125,7])
 PPIEtel <- ts(PPIEtelVector, start=c(2008,1), end=c(2013,12), frequency=12)
 plot(PPIEtel, main="PPIEtel")
@@ -179,7 +165,7 @@ cor(EfakAsIs , PPIEtel)
 Slightly postive correlation, most likely because in increase in sales for Etel would suggest an increase in sales for Efak
 
 ####National Holidays
-```{r}
+```{r echo=FALSE}
 # National Holidays
 NationalHolidaysVector <- c(ImportedIndicators[170:181,2],ImportedIndicators[170:181,3],ImportedIndicators[170:181,4],ImportedIndicators[170:181,5],ImportedIndicators[170:181,6],ImportedIndicators[170:181,7])
 NationalHolidays <- ts(NationalHolidaysVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -191,7 +177,7 @@ cor(EfakAsIs , NationalHolidays)
 National Holidays and Efak exports have a correlation coefficient of .001, which to me is almost statistically insignificant. 
 
 #### Chulwalar Index
-```{r}
+```{r echo=FALSE}
 # Chulwalar Index (Total value of all companies in Chulwalar)
 ChulwalarIndexVector <- c(ImportedIndicators[128:139,2],ImportedIndicators[128:139,3],ImportedIndicators[128:139,4],ImportedIndicators[128:139,5],ImportedIndicators[128:139,6],ImportedIndicators[128:139,7])
 ChulwalarIndex <- ts(ChulwalarIndexVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -203,7 +189,7 @@ The correlation coefficient for the Chulwalar Index and Efak exports is .71, whi
 
 
 ####Monthyl Inflation Rate
-```{r}
+```{r echo=FALSE}
 # Monthly Inflation rate in Chulwalar 
 InflationVector <- c(ImportedIndicators[142:153,2],ImportedIndicators[142:153,3],ImportedIndicators[142:153,4],ImportedIndicators[142:153,5],ImportedIndicators[142:153,6],ImportedIndicators[142:153,7])
 Inflation <- ts(InflationVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -214,7 +200,7 @@ cor(EfakAsIs , Inflation)
 The correlation coefficient for the monthly inflation rate and Efak exports is .145, so there is a slight positive correlation but nothing that warrants any further analysis in my opinion. 
 
 ####Proposed spending for Independence Day
-```{r}
+```{r echo=FALSE}
 # Proposed spending for Independence day presents
 IndependenceDayPresentsVector <- c(ImportedIndicators[156:167,2],ImportedIndicators[156:167,3],ImportedIndicators[156:167,4],ImportedIndicators[156:167,5],ImportedIndicators[156:167,6],ImportedIndicators[156:167,7])
 IndependenceDayPresents <- ts(IndependenceDayPresentsVector, start=c(2008,1), end=c(2013,12), frequency=12)
@@ -226,7 +212,8 @@ Here look at the correlation between spending for independence data and Efak exp
 
 
 #### Influence of National Holidays
-```{r}
+This indicator is an experiment where the influence of National Holidays is extended into the months leading up to the holiday. 
+```{r echo=FALSE}
 # Influence of National Holidays :
 # This indicator is an experiment where the influence of National Holidays is 
 # extended into the months leading up to the holiday. 
@@ -246,7 +233,9 @@ Here we look at the influence of national holidays, but this includes months lea
 
 The indicator is to be offset by one month, to see if the index change makes itself first noticeable on exports in the following months.
 
-```{r}
+1 Month Correlation
+
+```{r echo=FALSE}
 SIExternOffsetByOneMonthVector <- c(ImportedIndicators[57:68,2],ImportedIndicators[57:68,3],ImportedIndicators[57:68,4],ImportedIndicators[57:68,5],ImportedIndicators[57:68,6],ImportedIndicators[57:68,7])
 SIExternOffsetByOneMonth <- ts(SIGovVector, start=c(2008,1), end=c(2013,11), frequency=12)
 plot(SIExternOffsetByOneMonth, main="SIExternOffsetByOneMonth")
@@ -256,7 +245,9 @@ EfakAsIsWithoutDec12013 <- ts(EfakAsIsVector , start=c(2008,1), end=c(2013,11), 
 cor(EfakAsIsWithoutDec12013, SIExternOffsetByOneMonth)
 ```
 
-```{r}
+2 Month Shift Correlation
+
+```{r echo=FALSE}
 SIGovVectorShifted2Months <- c(ImportedIndicators[15:26,2],ImportedIndicators[15:26,3],ImportedIndicators[15:26,4],ImportedIndicators[15:26,5],ImportedIndicators[15:26,6],ImportedIndicators[15:26,7])
 SIGovShifted2Months <- ts(SIGovVectorShifted2Months , start=c(2008,1), end=c(2013,10), frequency=12)
 plot(SIGovShifted2Months)
@@ -265,6 +256,7 @@ EfakAsIsWithoutNovDec2013 <- ts(EfakAsIsVector , start=c(2008,1), end=c(2013,10)
 
 cor(EfakAsIsWithoutNovDec2013, SIGovShifted2Months)
 ```
+
 No significant changes , the correlation coefficient is very small for both the one month offset and the two month offset.
 
 
@@ -272,97 +264,85 @@ and creating a time series from the data
 
 
 
-####ModelWithAlllIndicators and with each indicator individually          
+####Model With All Indicators and with each Indicator individually          
 
 ```{r}
 # All Indiators in one model:
 ModelWithAlllIndicators <- tslm(EfakAsIs~ trend + season + CEPI + SIGov + Temperature + Births + SIExtern + UrbanoExports + GlobalisationPartyMembers + AEPI + PPIEtel + NationalHolidays + ChulwalarIndex + Inflation + IndependenceDayPresents)
-AIC(ModelWithAlllIndicators)
-# AIC: 1830
+summary(ModelWithAlllIndicators)$adj.r.squared
+plot(EfakAsIs, col='grey')
+lines(fitted(ModelWithAlllIndicators), col='red')
 
 
 # CEPI:
-# The CEPI Indicator correlated best with total exports. Indeed the multiple R? 
-# improved the model slighltly compared to the simple ModelWithTrendAndSeasonalityOnly 
-# However the adjusted R? remains the same.
 ModelWithCEPI <- tslm(EfakAsIs ~ trend + season + CEPI)
-summary(ModelWithCEPI)
-AIC(ModelWithCEPI)
+summary(ModelWithCEPI)$adj.r.squared
 
 
 # SIGov:
-# The Satisfaction Index (gov)  hardly changes the function of the model.
 ModelWithSIGov <- tslm(EfakAsIs ~ trend + season + SIGov)
-AIC(ModelWithSIGov)
+summary(ModelWithSIGov)$adj.r.squared
 
 # Temperature:
 ModelWithTemperature <- tslm(EfakAsIs ~ trend + season + Temperature)
-AIC(ModelWithTemperature)
+summary(ModelWithTemperature)$adj.r.squared
 
 # Births:
 ModelWithBirths <- tslm(EfakAsIs ~ trend + season + Births)
-AIC(ModelWithBirths)
+summary(ModelWithBirths)$adj.r.squared
 
 # SIExtern:
 ModelWithSIExtern <- tslm(EfakAsIs ~ trend + season + SIExtern)
-AIC(ModelWithSIExtern)
+summary(ModelWithSIExtern)$adj.r.squared
 
 # UrbanoExports:
-# Indicator with adjusted R? shows a better result than the reference model (ModelWithTrendAndSeasonalityOnly).
-# The individual months are also very significant.
 ModelWithTotalUrbanoExports <- tslm(EfakAsIs ~ trend + season + UrbanoExports)
-AIC(ModelWithTotalUrbanoExports) 
+summary(ModelWithTotalUrbanoExports)$adj.r.squared 
 
 
 # GlobalisationPartyMembers:
 ModelWithGlobalisationPartyMembers <- tslm(EfakAsIs ~ trend + season + GlobalisationPartyMembers)
-AIC(ModelWithGlobalisationPartyMembers) 
+summary(ModelWithGlobalisationPartyMembers)$adj.r.squared 
 
 
 # AEPI:
 ModelWithAEPI <- tslm(EfakAsIs ~ trend + season + AEPI)
-AIC(ModelWithAEPI) 
-plot(EfakAsIs, col='grey')
-lines(fitted(ModelWithAEPI), col='red')
+summary(ModelWithAEPI)$adj.r.squared 
+
 
 # PPIEtel:
 ModelWithPPIEtel <- tslm(EfakAsIs ~ trend + season + PPIEtel)
-AIC(ModelWithPPIEtel)
+summary(ModelWithPPIEtel)$adj.r.squared
  
 
 # NationalHolidays:
-# Indicator with the best adjusted R?. The months remain very significant and the indicator
-# itself has a p-value of 0,00636**
 ModelWithNationalHolidays <- tslm(EfakAsIs ~ trend + season + NationalHolidays)
-AIC(ModelWithNationalHolidays)
+summary(ModelWithNationalHolidays)$adj.r.squared
 
 
 # ChulwalarIndex:
 ModelWithChulwalarIndex <- tslm(EfakAsIs ~ trend + season + ChulwalarIndex)
-AIC(ModelWithChulwalarIndex) 
+summary(ModelWithChulwalarIndex)$adj.r.squared 
 
 
 # Inflation:
 ModelWithInflation <- tslm(EfakAsIs ~ trend + season + Inflation)
-AIC(ModelWithInflation)
+summary(ModelWithInflation)$adj.r.squared
 
 
 # IndependenceDayPresents:
 ModelWithIndependenceDayPresents <- tslm(EfakAsIs ~ trend + season + IndependenceDayPresents)
-AIC(ModelWithIndependenceDayPresents)
+summary(ModelWithIndependenceDayPresents)$adj.r.squared
 
 
 # InfluenceNationalHolidays:
-# Indicator with the best adjusted R?. The months remain very significant and the indicator
-# itself has a p-value of 0,00636**
 ModelWithInfluenceNationalHolidays <- tslm(EfakAsIs ~ trend + season + InfluenceNationalHolidays)
-AIC(ModelWithInfluenceNationalHolidays)
+summary(ModelWithInfluenceNationalHolidays)$adj.r.squared
 
 ```
+Looking at all the adj R sqrt values for the models above it seems like the the highest the Model With all Indicators followed by CEPI, Urbano Exports and then is AEPI. Looking at the plot its clear that model somewhat follows the Efak trend. So when we begin forecasting we will know where to start
 
-Looking at all the AIC values for the models above it seems like the the lowest is AEPI followed by CEPI. Looking at the plot its clear that model somewhat follows the Efak trend. So when we begin forecasting we will know where to start
-
-```{r}
+```{r echo=FALSE}
 IndicatorsMatrix <-cbind(CEPIVector, SIGovVector, TemperatureVector, BirthsVector, SIGovVector, UrbanoExportsVector, GlobalisationPartyMembersVector, AEPIVector, PPIEtel, NationalHolidaysVector, ChulwalarIndexVector, InflationVector, IndependenceDayPresentsVector)
 
 # Establish the standardised data matrix
@@ -378,6 +358,7 @@ IndicatorsCorrelationCoefficientMatrix=(1/(NumberOfIndicators-1))*t(Indicatorsma
 ```
 
 
+####Model With High and Low Correlating Indicators   
 ```{r}
 
 #ModelWithHighCorrelatingIndicators                                 
@@ -385,67 +366,46 @@ IndicatorsCorrelationCoefficientMatrix=(1/(NumberOfIndicators-1))*t(Indicatorsma
 # In this model only the indicators that correlate well with eachother have been used.  
 
 ModelWithHighCorrelatingIndicators <- tslm(EfakAsIs ~ trend + season + CEPI + SIExtern + UrbanoExports + GlobalisationPartyMembers + AEPI)
-summary(ModelWithHighCorrelatingIndicators) 
-# Adjusted R≤: 0,8941
+summary(ModelWithHighCorrelatingIndicators)$adj.r.squared 
+
 # It can be seen that the addition of these indicators causes the seasonality to be weakened. 
-# The individual indicators are not very significant either. 
-# Is this a multicollinearity effect? Or is it just because we have chose irrelevant indicators? 
-# An experimental idea comes from the next section:
-
-
-#ModelWithLowCorrelatingIndicators                                      #
-
-
-# In this model only the indicators that hardly correlate at all with eachother have been used.  
-# See the CorrelationCoefficientMatrix for clarification.
-
 
 ModelWithLowCorrelatingIndicators <- tslm(EfakAsIs ~ trend + season + NationalHolidays + UrbanoExports + GlobalisationPartyMembers)
-summary(ModelWithLowCorrelatingIndicators) 
-# Adjusted R≤: 0.9097
+summary(ModelWithLowCorrelatingIndicators)$adj.r.squared 
+
 # It can be seen that the addition of these indicators causes the seasonality to be weakened. 
-# The individual indicators are not very significant either. Thus we should continue with
-# trend and *seasonality*; the comparison of 4.3 and 4.4 confirms this:  
-
-
-#ModelWithTrendAndSeasonalityOnly                                     
 
 ModelWithTrendAndSeasonalityOnly <- tslm(EfakAsIs ~ trend + season)
-summary(ModelWithTrendAndSeasonalityOnly)
-# Adjusted R≤: 0,9004
-# Remains one of the best models when looking at total exports.
+summary(ModelWithTrendAndSeasonalityOnly)$adj.r.squared
+
 ```
+Here we see that the adj R is highest for the Model With Low Correlating Indicators. It is .925
 
-
-####ModelWithEfakExportsIndicators
+####Model With Efak Exports Indicators
 ```{r}
 # ModelWithEfakExportsIndicators will be matched with a set of indicators that correlate with the Efak exports.
-# The adjusted R? has the best value. However the diffent months and indicators are not significant apart from 
-# GlobaliationPartyMembers. When testing the forecasts based on this model it generated unrealistic exports which were 
-# much higher than the As Is data.
 ModelWithEfakExportsIndicators <- tslm(EfakAsIs  ~ trend + season + CEPI + UrbanoExports + AEPI + GlobalisationPartyMembers)
-AIC(ModelWithEfakExportsIndicators)
+summary(ModelWithEfakExportsIndicators)$adj.r.squared 
 plot(EfakAsIs, col='grey')
 lines(fitted(ModelWithEfakExportsIndicators), col='red')
 
 ModelEfakSalesWithCEPI <- tslm(EfakAsIs  ~ trend + season + CEPI)
-AIC(ModelEfakSalesWithCEPI)
+summary(ModelEfakSalesWithCEPI)$adj.r.squared 
 
 # ModelEfakSalesWithTrendAnsSeasonalityOnly does not seem to be anything special, but it returns fairly good results.
 ModelEfakSalesWithTrendAnsSeasonalityOnly <- tslm(EfakAsIs  ~ trend + season)
-AIC(ModelEfakSalesWithTrendAnsSeasonalityOnly)
-
+summary(ModelEfakSalesWithTrendAnsSeasonalityOnly)$adj.r.squared 
 
 ModelWithCEPIOnly <- tslm(EfakAsIs  ~ CEPI)
-AIC(ModelWithCEPIOnly)
+summary(ModelWithCEPIOnly)$adj.r.squared 
 # A Forecast based entirely on the CEPI is not convincing
 ```
+Here we see that the adj r is highest for the Model with Efak Exports as Indicators. This makes sense because the model should reflect Efak exports.
 
-
-# Predictive modelling 
+# 4. Predictive modelling 
 Now we are using the various provided models to find the an accurate prediction forecast for the Efak data.To find a better model we are going to compare AIC, AICc, BIC, and the Error Measures. AIC is the measure of relative quality of statistical models. For this analysis, the lower the AIC means the model minimizes information loss, and therefor may fit the data better. AICc is AIC but it corrects for finite sample sizes. RMSE shows the absolute fit of the model to the data. Since it is the square root of the variance of the residuals, it is an absolute measure of fit.
 
-###Shorten the time series in order to test the forecasts               
+######Shorten the time series in order to test the forecasts               
 
 ```{r echo=FALSE}
 # Shortening the exports data in the Time Series in order to be able to compare the produced forecasts with the 
@@ -554,17 +514,17 @@ InfluenceNationalHolidaysVector_2014 <- ts(InfluenceNationalHolidaysVector_2014,
 
 
 
-####Forecast ModelWithHighCorrelatingIndicators                          
+###Forecast Model With High Correlating Indicators                          
 
 ```{r}
 # Shorten ModelWithHighCorrelatingIndicators by one year in order to be able to produce a forecast for 2013. 
 ModelWithHighCorrelatingIndicators_2012 <- tslm(EfakAsIs_2012 ~ trend + season + CEPI_2012 + SIExtern_2012 + UrbanoExports_2012 + GlobalisationPartyMembers_2012 + AEPI_2012)
 AIC(ModelWithHighCorrelatingIndicators_2012) 
-
+summary(ModelWithHighCorrelatingIndicators_2012)$sigma
 # Add "newdata" to the 2013 indicator values for the forecast 
 ModelWithHighCorrelatingIndicators_Forecast <- forecast(ModelWithHighCorrelatingIndicators_2012,newdata=data.frame(CEPI_2012=CEPI_2013, SIExtern_2012=SIExtern_2013, UrbanoExports_2012= UrbanoExports_2013, GlobalisationPartyMembers_2012=GlobalisationPartyMembers_2013, AEPI_2012=AEPI_2013),h=12)
 plot(ModelWithHighCorrelatingIndicators_Forecast, main="ModelWithHighCorrelatingIndicators_Forecast")
-ModelWithHighCorrelatingIndicators_Forecast
+#ModelWithHighCorrelatingIndicators_Forecast
 
 # In order to be able to correlate the Forecast with the As Is Data, it is necessary to convert the Point 
 # Estimator into a time series. 
@@ -578,22 +538,23 @@ cor(EfakAsIs_2013, EfakPlan_2013)
 # A Comparison with linear regression also supports the result.
 ModelWithHighCorrelatingIndicators_forecast_lm <- lm(EfakAsIs_2013 ~ ModelWithHighCorrelatingIndicators_PointForecast, data = EfakAsIs_2013)
 EfakAsIs_2013_lm <- lm(EfakAsIs_2013 ~ EfakAsIs_2013, data = EfakAsIs_2013)
-summary(ModelWithHighCorrelatingIndicators_forecast_lm)
-summary(EfakAsIs_2013_lm)
+#summary(ModelWithHighCorrelatingIndicators_forecast_lm)
+#summary(EfakAsIs_2013_lm)
 ```
-This AIC value is very low: 1528, which makes sense because its modeled with high correlating indicators. 
+This AIC value for ModelWithHighCorrelatingIndicators_2012 is very low: 1528, which makes sense because its modeled with high correlating indicators. 
 
-#### Forecast ModelWithLowCorrelatingIndicators  
+### Forecast Model With Low Correlating Indicators  
 ```{r}
 
 
 # Shorten ModelWithLowCorrelatingIndicators by one year in order to be able to produce a forecast for 2013. 
 ModelWithLowCorrelatingIndicators_2012 <- tslm(EfakAsis_2012 ~ trend + season + NationalHolidays_2012 + UrbanoExports_2012 + GlobalisationPartyMembers_2012)
-AIC(ModelWithLowCorrelatingIndicators_2012) 
+AIC(ModelWithLowCorrelatingIndicators_2012)
+summary(ModelWithLowCorrelatingIndicators_2012)$sigma
 # Add "newdata" to the 2013 indicator values for the forecast 
 ModelWithLowCorrelatingIndicators_Forecast <- forecast(ModelWithLowCorrelatingIndicators_2012,newdata=data.frame(NationalHolidays_2012=NationalHolidays_2013, UrbanoExports_2012= UrbanoExports_2013, GlobalisationPartyMembers_2012=GlobalisationPartyMembers_2013),h=12)
 plot(ModelWithLowCorrelatingIndicators_Forecast, main="ModelWithLowCorrelatingIndicators_Forecast")
-ModelWithLowCorrelatingIndicators_Forecast
+#ModelWithLowCorrelatingIndicators_Forecast
 
 # In order to be able to correlate the Forecast with the As Is Data, it is necessary to convert the Point 
 # Estimator into a time series. 
@@ -607,22 +568,22 @@ cor(EfakAsIs_2013, EfakPlan_2013)
 # A Comparison with linear regression also supports the result.
 ModelWithLowCorrelatingIndicators_forecast_lm <- lm(EfakAsIs_2013 ~ ModelWithLowCorrelatingIndicators_PointForecast, data = EfakAsIs_2013)
 EfakAsis_2013_lm <- lm(EfakAsIs_2013 ~ EfakPlan_2013, data = EfakAsIs_2013)
-summary(ModelWithLowCorrelatingIndicators_forecast_lm)
-summary(EfakAsIs_2013_lm)
+#summary(ModelWithLowCorrelatingIndicators_forecast_lm)
+#summary(EfakAsIs_2013_lm)
 ```
-This AIC value is also very small. It is 1524, which means this model may fit better than the pervious one.
+This AIC value for ModelWithLowCorrelatingIndicators_2012 is also very small. It is 1524, which means this model may fit better than the pervious one.
 
 
-####  Forecast ModelWithTrendAndSeasonalityOnly                          
+###  Forecast Model With Trend And Seasonality Only                          
 ```{r}
 # Shorten ModelWithTrendAndSeasonalityOnly by one year in order to be able to produce a forecast for 2013.
 ModelWithTrendAndSeasonalityOnly_2012 <- tslm(EfakAsIs_2012 ~ trend + season)
 AIC(ModelWithTrendAndSeasonalityOnly_2012) 
-
+summary(ModelWithTrendAndSeasonalityOnly_2012)$sigma
 # Add "newdata" to the 2013 indicator values for the forecast.
 ModelWithTrendAndSeasonalityOnly_Forecast <- forecast(ModelWithTrendAndSeasonalityOnly_2012,h=12)
 plot(ModelWithTrendAndSeasonalityOnly_Forecast, main="ModelWithTrendAndSeasonalityOnly_Forecast")
-ModelWithTrendAndSeasonalityOnly_Forecast
+#ModelWithTrendAndSeasonalityOnly_Forecast
 
 # In order to be able to correlate the Forecast with the As Is Data, it is necessary to convert the Point 
 # Estimator into a time series. 
@@ -636,15 +597,15 @@ cor(EfakAsIs_2013, EfakPlan_2013)
 # A Comparison with linear regression also supports the result.
 ModelWithTrendAndSeasonalityOnly_Forecast_lm <- lm(EfakAsIs_2013 ~ ModelWithTrendAndSeasonalityOnly_PointForecast, data = EfakAsIs_2013)
 EfakAsIs_2013_lm <- lm(EfakAsIs_2013 ~ EfakPlan_2013, data = EfakAsIs_2013)
-summary(ModelWithTrendAndSeasonalityOnly_Forecast_lm)
-summary(EfakAsIs_2013_lm)
+#summary(ModelWithTrendAndSeasonalityOnly_Forecast_lm)
+#summary(EfakAsIs_2013_lm)
 
 ```
-This AIC value is 1553 which is larger than the previous model, this suggest it does not forcast Efak trends as well.
+This AIC value for ModelWithTrendAndSeasonality is 1553 which is larger than the previous model, this suggest it does not forcast Efak trends as well.
 
 
 
-####  Forecast ModelWithEfakExportsIndicators                            
+###  Forecast Model With Efak Exports Indicators                            
 
 ```{r}
 # Shorten the variables in ModelWithEfakExportsIndicators by one year in order to be able to produce a forecast for 2013.
@@ -652,10 +613,14 @@ ModelWithEfakExportsIndicators_2012 <- tslm(EfakAsIs_2012 ~ trend + season + CEP
 ModelEfakSalesWithCEPI_2012 <- tslm(EfakAsIs_2012 ~ trend + season + CEPI_2012)
 ModelEfakSalesWithTrendAnsSeasonalityOnly_2012 <- tslm(EfakAsIs_2012 ~ trend + season)
 ModelWithCEPIOnly_2012 <- tslm(EfakAsIs_2012 ~ CEPI_2012)
-AIC(ModelWithEfakExportsIndicators_2012) 
+AIC(ModelWithEfakExportsIndicators_2012)
+summary(ModelWithEfakExportsIndicators_2012)$sigma
 AIC(ModelEfakSalesWithCEPI_2012) 
-AIC(ModelEfakSalesWithTrendAnsSeasonalityOnly_2012) 
+summary(ModelEfakSalesWithCEPI_2012)$sigma
+AIC(ModelEfakSalesWithTrendAnsSeasonalityOnly_2012)
+summary(ModelEfakSalesWithTrendAnsSeasonalityOnly_2012)$sigma
 AIC(ModelWithCEPIOnly_2012)
+summary(ModelWithCEPIOnly_2012)$sigma
 
 # Add "newdata" to the 2013 indicator values for the forecast.
 ModelWithEfakExportsIndicators_Forecast <- forecast(ModelWithEfakExportsIndicators_2012, newdata=data.frame(CEPI_2012=CEPI_2013, UrbanoExports_2012 = UrbanoExports_2013, AEPI_2012 = AEPI_2013),h=12)
@@ -695,16 +660,17 @@ Looking at the Efak Exports as  Indicator, the AIC values are still not as small
 
 
 
-#### Forecast ModelWithTotalUrbanoExports      
+### Forecast Model With Total Urbano Exports      
 ```{r}
 # Shorten the variables in ModelWithTotalUrbanoExports by one year in order to be able to produce a forecast for 2013.
 ModelWithTotalUrbanoExports_2012 <- tslm(EfakAsIs_2012 ~ trend + season + UrbanoExports_2012)
 AIC(ModelWithTotalUrbanoExports_2012) 
+summary(ModelWithTotalUrbanoExports_2012)$sigma
 
 # Add "newdata" to the 2013 indicator values for the forecast.
 ModelWithTotalUrbanoExports_Forecast <- forecast(ModelWithTotalUrbanoExports_2012, newdata=data.frame(UrbanoExports_2012=UrbanoExports_2013), h=12)
 plot(ModelWithTotalUrbanoExports_Forecast,main="ModelWithTotalUrbanoExports_Forecast")
-ModelWithTotalUrbanoExports_Forecast
+#ModelWithTotalUrbanoExports_Forecast
 
 
 # In order to be able to correlate the Forecast with the As Is data, it is necessary to convert the Point 
@@ -719,14 +685,14 @@ cor(EfakAsIs_2013, EfakPlan_2013)
 ```
 The AIC value for this model is 1523, which is lower than all models we have observed previously. This would suggest that this model has the best fit. 
 
-####Forecast ModelWithNationalHolidays                                 
+###Forecast Model With National Holidays                                 
 
 ```{r}
 
 # Shorten the variables in ModelWithNationalHolidays by one year in order to be able to produce a forecast for 2013.
 ModelWithNationalHolidays_2012 <- tslm(EfakAsIs_2012 ~ trend + season + NationalHolidays_2012)
 AIC(ModelWithNationalHolidays_2012) 
-
+summary(ModelWithNationalHolidays_2012)$sigma
 # Add "newdata" to the 2013 indicator values for the forecast.
 ModelWithNationalHolidays_Forecast <- forecast(ModelWithNationalHolidays_2012, newdata=data.frame(NationalHolidays_2012=NationalHolidays_2013), h=12)
 plot(ModelWithNationalHolidays_Forecast,main="ModelWithNationalHolidays_Forecast")
@@ -741,19 +707,19 @@ ModelWithNationalHolidays_PointForecast <- ts(ModelWithNationalHolidays_Forecast
 # Correlation of the forecasts and As Is Data. As a comparison, the correlation of the As Is data for 2013 with the Plan Data.
 cor(ModelWithNationalHolidays_PointForecast, EfakAsIs_2013) 
 ```
-The AIC value of 1554 is still higher than the total Urbano Exports model
+The AIC value for ModelWithNationalHolidays_2012 is 1554, still higher than the total Urbano Exports model
 
-#### Forecast ModelWithInfluenceNationalHolidays                        
+### Forecast Model With Influence National Holidays                        
 
 ```{r}
 # Shorten the variables in ModelWithInfluenceNationalHolidays by one year in order to be able to produce a forecast for 2013.
 ModelWithInfluenceNationalHolidays_2012 <- tslm(EfakAsIs_2012 ~ trend + season + InfluenceNationalHolidays_2012)
 AIC(ModelWithInfluenceNationalHolidays_2012) 
-
+summary(ModelWithInfluenceNationalHolidays_2012)$sigma
 # Add "newdata" to the 2013 indicator values for the forecast.
 ModelWithInfluenceNationalHolidays_Forecast <- forecast(ModelWithInfluenceNationalHolidays_2012, newdata=data.frame(InfluenceNationalHolidays_2012=InfluenceNationalHolidaysVector_2013), h=12)
 plot(ModelWithInfluenceNationalHolidays_Forecast,main="ModelWithInfluenceNationalHolidays_Forecast")
-ModelWithInfluenceNationalHolidays_Forecast
+#ModelWithInfluenceNationalHolidays_Forecast
 
 # In order to be able to correlate the Forecast with the As Is Data, it is necessary to convert the Point 
 # Estimator into a time series.
@@ -768,12 +734,13 @@ cor(EfakAsIs_2013, EfakPlan_2013)
 The national holidays model has a larger AIC of 1554, than the Urbano Exports, this makes sense because when we looked the correlation between the two variables it didn’t seem like either had a significant impact on the other
 
 
-#### Forecast for 2014                                                    
+### Forecast for 2014                                                    
 
 ```{r}
 # As ModelWithLowCorrelatingIndicators was the one of best fitting model for a forecast, the exports data for 2014 will be forecast
 # based on trend and seasonality and NationalHolidays, UrbanoExports and GlobalisationPartyMembers. 
-AIC(ModelWithLowCorrelatingIndicators) 
+AIC(ModelWithLowCorrelatingIndicators)
+summary(ModelWithLowCorrelatingIndicators)$sigma
 Forecast_ModelWithLowCorrelatingIndicators_2014 <- forecast(ModelWithLowCorrelatingIndicators,newdata=data.frame(NationalHolidays=NationalHolidays_2014, UrbanoExports= UrbanoExports_2014, GlobalisationPartyMembers=GlobalisationPartyMembers_2014),h=12)
 plot(Forecast_ModelWithLowCorrelatingIndicators_2014, main="Forecast_2014")
 
@@ -787,7 +754,8 @@ cor(EfakAsIs,EfakPlan)
 
 # As ModelWithTrendAndSeasonalityOnly also gave a well fitting model for a forecast, the exports data for 2014 will be forecast
 # based on trend and seasonality. 
-AIC(ModelWithTrendAndSeasonalityOnly) 
+AIC(ModelWithTrendAndSeasonalityOnly)
+summary(ModelWithTrendAndSeasonalityOnly)$sigma
 Forecast_2014 <- forecast(ModelWithTrendAndSeasonalityOnly,h=12)
 plot(Forecast_2014, main="Forecast_2014")
 
@@ -805,6 +773,7 @@ cor(EfakAsIs,EfakPlan)
 # it could be possible that the data for 2013 was to blame. Therefore there is another Forecast using the
 # ModelWithNationalHolidays
 AIC(ModelWithNationalHolidays)
+summary(ModelWithNationalHolidays)$sigma
 Forecast_2014_alternative <- forecast(ModelWithNationalHolidays, newdata=data.frame(NationalHolidays=NationalHolidays_2014),h=12)
 plot(Forecast_2014_alternative,main="Forecast_2014_alternative")
 
